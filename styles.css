@@ -1,0 +1,74 @@
+body{
+  background-color: #010008;
+  overflow: hidden;
+}
+
+html{
+  height: 100vh;
+    margin: 0;
+}
+.container {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  margin: 50% 0 50% 0;
+  height: auto;
+}
+
+#username-form, #title {
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+#original-lyrics p {
+  font-family: 'Trebuchet MS', sans-serif;
+  font-weight: bold; 
+  font-size: 18px; 
+  line-height: 1.5;
+  color: antiquewhite;
+}
+
+label, input, button {
+  margin-bottom: 10px;
+}
+
+.origin-lyric {
+  font-family: 'Trebuchet MS', sans-serif;
+  font-weight: 1000; 
+  font-size: 16px; 
+  line-height: 1.5;
+  color: white;
+}
+
+.pt-lyric, label {
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 14px; 
+  font-weight: bold;
+  color: #CCCCCC;
+}
+
+#title {
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 48px; 
+  font-weight: bold;
+  color: #CCCCCC;
+}
+
+#loggout-btn, #toggle-translation-btn, #update-song-btn, #get-song {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #333333;
+  border: 2px solid #666666;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+#loggout-btn:hover, #toggle-translation-btn:hover, #update-song-btn:hover, #get-song:hover {
+  background-color: #555555;
+}
