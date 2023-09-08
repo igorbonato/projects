@@ -26,7 +26,6 @@ async function fetchCurrentSong(username) {
 			const artist = currentSong.artist["#text"];
 			const trackName = currentSong.name;
 
-			// Redirect to the next page with the artist and track name as URL parameters
 			window.location.href = `lyrics.html?artist=${encodeURIComponent(
 				artist
 			)}&track=${encodeURIComponent(trackName)}`;
