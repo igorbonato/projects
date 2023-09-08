@@ -1,6 +1,5 @@
 body{
   background-color: #010008;
-  overflow: hidden;
 }
 
 html{
@@ -11,7 +10,6 @@ html{
   display: grid;
   justify-content: center;
   align-items: center;
-  margin: 50% 0 50% 0;
   height: auto;
 }
 
