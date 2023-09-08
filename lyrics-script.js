@@ -106,7 +106,7 @@ async function fetchCurrentSong(username) {
 	try {
 		const lastfmApiKey = "4599629be9c1be5c6a21fe58938a281f";
 		const response = await fetch(
-			`http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${lastfmApiKey}&format=json`
+			`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${lastfmApiKey}&format=json`
 		);
 		const data = await response.json();
 
