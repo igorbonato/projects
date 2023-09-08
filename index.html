@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-		<title>LastFM Lyrics</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Lyrics</title>
 		<link rel="stylesheet" href="styles.css" />
 	</head>
 	<body>
-		<div class="container">
-			<h1 id="title">LastFM Lyrics</h1>
-			<form id="username-form">
-				<label for="lastfm-username">username:</label>
-				<input type="text" id="lastfm-username" required />
-				<button type="submit" id="get-song">Get Song</button>
-			</form>
-		</div>
-		<script src="script.js" type="module"></script>
+		<h1>Lyrics</h1>
+		<button id="toggle-translation-btn">🇧🇷</button>
+		<button id="update-song-btn">🔃</button>
+		<div id="original-lyrics"></div>
+		<div id="lyrics-container"></div>
+		<button id="loggout-btn">loggout</button>
+		<script src="lyrics-script.js" type="module"></script>
 	</body>
 </html>
