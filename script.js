@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", function () {
+	setDefaultUsername();
+});
+
 function setDefaultUsername() {
 	const usernameInput = document.getElementById("lastfm-username");
 	usernameInput.value = "igorbonato";
@@ -41,3 +45,9 @@ async function fetchCurrentSong(username) {
 		alert("Error fetching data from LastFM API.");
 	}
 }
+
+const tweetsButton = document.getElementById("btn-tweets");
+
+tweetsButton.addEventListener("click", function () {
+	window.location.href = "tweets.html";
+});

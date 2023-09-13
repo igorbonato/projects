@@ -71,3 +71,21 @@ label, input, button {
 #loggout-btn:hover, #toggle-translation-btn:hover, #update-song-btn:hover, #get-song:hover {
   background-color: #555555;
 }
+
+#btn-tweets {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #03619c;
+  border: 2px solid #00436d;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+#btn-tweets:hover {
+  background-color: #1DA1F2;
+}

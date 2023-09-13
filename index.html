@@ -4,15 +4,24 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>LastFM Lyrics</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+		/>
 		<link rel="stylesheet" href="styles.css" />
 	</head>
-	<body onload="setDefaultUsername()">
+	<body>
 		<div class="container">
 			<h1 id="title">LastFM Lyrics</h1>
 			<form id="username-form">
 				<label for="lastfm-username">username:</label>
 				<input type="text" id="lastfm-username" required />
-				<button type="submit" id="get-song">Get Song</button>
+				<div>
+					<button type="submit" id="get-song">Get Song</button>
+					<button type="submit" id="btn-tweets">
+						<i class="fab fa-twitter"></i>
+					</button>
+				</div>
 			</form>
 		</div>
 		<script src="script.js" type="module"></script>
