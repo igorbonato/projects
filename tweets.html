@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+			/* Add your CSS styles for responsiveness here */
+			.tweet-box {
+				border: 1px solid #ccc;
+				padding: 10px;
+				margin: 10px;
+			}
+		</style>
+		<title>Tweet Interface</title>
+	</head>
+	<body>
+		<input type="text" id="filter-input" placeholder="Filter tweets by text" />
+		<button id="search-button">Search</button>
+		<div id="tweet-container"></div>
+
+		<script>
+			// Function to create a tweet box
+			function createTweetBox(tweet) {
+				const tweetBox = document.createElement("div");
+				tweetBox.classList.add("tweet-box");
+
+				const tweetLink = document.createElement("a");
+				tweetLink.href = `https://twitter.com/kurtcoube/status/${tweet.id_str}`;
+				tweetLink.textContent = tweet.full_text;
+
+				const createdAt = document.createElement("p");
+				createdAt.textContent = `Created at: ${tweet.created_at}`;
+
+				const favoriteCount = document.createElement("p");
+				favoriteCount.textContent = `Favorites: ${tweet.favorite_count}`;
+
+				const retweetCount = document.createElement("p");
+				retweetCount.textContent = `Retweets: ${tweet.retweet_count}`;
+
+				tweetBox.appendChild(tweetLink);
+				tweetBox.appendChild(createdAt);
+				tweetBox.appendChild(favoriteCount);
+				tweetBox.appendChild(retweetCount);
+
+				return tweetBox;
+			}
+
+			// Get the container element
+			const tweetContainer = document.getElementById("tweet-container");
+
+			// Get the filter input element
+			const filterInput = document.getElementById("filter-input");
+
+			// Get the search button element
+			const searchButton = document.getElementById("search-button");
+
+			// Function to filter tweets based on text
+			function filterTweets(filterText) {
+				tweetContainer.innerHTML = ""; // Clear the existing tweets
+				fetch("./tweets.json") // Load JSON data
+					.then((response) => response.json())
+					.then((data) => {
+						data.forEach((tweet) => {
+							if (tweet.full_text.includes(filterText)) {
+								const tweetBox = createTweetBox(tweet);
+								tweetContainer.appendChild(tweetBox);
+							}
+						});
+					})
+					.catch((error) => {
+						console.error("Error loading JSON:", error);
+					});
+			}
+
+			// Add an event listener to the search button
+			searchButton.addEventListener("click", function () {
+				const filterText = filterInput.value.trim();
+				filterTweets(filterText);
+			});
+
+			// Initial display of tweets
+			filterTweets("");
+		</script>
+	</body>
+</html>

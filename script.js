@@ -1,3 +1,8 @@
+function setDefaultUsername() {
+	const usernameInput = document.getElementById("lastfm-username");
+	usernameInput.value = "igorbonato";
+}
+
 document
 	.getElementById("username-form")
 	.addEventListener("submit", function (event) {
