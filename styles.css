@@ -20,6 +20,23 @@ html{
   place-items: center;
 }
 
+.music-title{
+  text-align: center;
+  color: azure;
+}
+
+#original-lyrics, .divLoggout {
+  display: flex;
+  justify-content: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  grid-gap: 10px;
+  align-items: center;
+}
+
 #original-lyrics p {
   font-family: 'Trebuchet MS', sans-serif;
   font-weight: bold; 
@@ -28,16 +45,22 @@ html{
   color: antiquewhite;
 }
 
-label, input, button {
+label, input, .button {
   margin-bottom: 10px;
 }
 
 .origin-lyric {
   font-family: 'Trebuchet MS', sans-serif;
   font-weight: 1000; 
-  font-size: 16px; 
+  font-size: 17px; 
   line-height: 1.5;
   color: white;
+  margin: 10px 0;
+}
+
+.pt-lyric{
+  margin: 10px 0;
+  font-size: 16px !important;
 }
 
 .pt-lyric, label {

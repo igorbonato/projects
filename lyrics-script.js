@@ -68,14 +68,17 @@ async function fetchLyricsAndTranslation(artist, track) {
 document
 	.getElementById("toggle-translation-btn")
 	.addEventListener("click", function () {
-		const translationContainer = document.getElementById("lyrics-container");
 		const originalLyricsContainer = document.getElementById("original-lyrics");
+		const translationContainer = document.getElementById("lyrics-container");
+
 		if (translationContainer.style.display === "none") {
-			translationContainer.style.display = "block";
+			translationContainer.style.display = "grid";
+			translationContainer.style.justifyContent = "center";
 			originalLyricsContainer.style.display = "none";
 		} else {
 			translationContainer.style.display = "none";
-			originalLyricsContainer.style.display = "block";
+			originalLyricsContainer.style.display = "flex";
+			originalLyricsContainer.style.justifyContent = "center";
 		}
 	});
 
