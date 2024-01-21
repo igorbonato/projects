@@ -40,24 +40,41 @@ function generateWordCloud(user) {
 	const period = getSelectedPeriod();
 
 	async function getLyrics(song) {
-		const response = await fetch(
-			`https://api.vagalume.com.br/search.php?apikey=${vagalumeApiKey}&art=${encodeURIComponent(
-				song.artist.name
-			)}&mus=${encodeURIComponent(song.name)}`
-		);
+		try {
+			const response = await fetch(
+				`https://api.vagalume.com.br/search.php?apikey=${vagalumeApiKey}&art=${encodeURIComponent(
+					song.artist.name
+				)}&mus=${encodeURIComponent(song.name)}`
+			);
 
-		const data = await response.json();
+			// Check if the response is ok
+			if (!response.ok) {
+				throw new Error("Network response was not ok");
+			}
 
-		if (
-			data.type === "song_notfound" ||
-			!data.mus ||
-			!data.mus[0] ||
-			!data.mus[0].text
-		) {
+			const data = await response.json();
+
+			if (
+				data.type === "song_notfound" ||
+				!data.mus ||
+				!data.mus[0] ||
+				!data.mus[0].text
+			) {
+				return null;
+			}
+
+			return data.mus[0].text;
+		} catch (error) {
+			console.error("Error fetching lyrics:", error);
+
+			containerElement.innerHTML = `
+			<p>Failed to fetch lyrics. Please try reloading the page or wait.</p>
+			<button id="reloadButton" onclick="location.reload();">
+				RELOAD <i class="fa-solid fa-repeat" style="color: white"></i>
+			</button>
+			`;
 			return null;
 		}
-
-		return data.mus[0].text;
 	}
 
 	// function to get user information from Last.fm
@@ -152,7 +169,7 @@ function generateWordCloud(user) {
 			const userInfo = await getUserInfo(user);
 
 			const titleElement = document.getElementById("title");
-			titleElement.innerHTML = `<img class="img-user" src="${userInfo.image}" alt="User Image" /> wordcloud for top tracks of ${user}`;
+			titleElement.innerHTML = `<img class="img-user" src="${userInfo.image}" alt="User Image" /> wordcloud for top tracks of <span class="user-title">${user}</span>`;
 
 			chart.angles([0]);
 

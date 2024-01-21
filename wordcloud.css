@@ -36,6 +36,32 @@ footer::before {
     margin: 10px 0;
 }
 
+#title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.user-title {
+    font-weight: 800;
+    font-size: 28px;
+    position: relative;
+    animation: pulsate 2s infinite;
+}
+
+@keyframes pulsate {
+    0% {
+        text-shadow: 0 0 20px #ff0000;
+    }
+
+    50% {
+        text-shadow: 0 0 40px #ff0000;
+    }
+
+    100% {
+        text-shadow: 0 0 20px #ff0000;
+    }
+}
+
 .header,
 #title {
     display: flex;
@@ -56,6 +82,10 @@ footer::before {
 #container-dois {
     max-height: 450px;
     overflow-y: auto;
+}
+
+#container-dois {
+    margin: 30px 0px;
 }
 
 h1,
@@ -100,4 +130,19 @@ button:hover {
 
 select {
     padding: 10px;
+}
+
+#reloadButton {
+    max-width: 100px;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Optional: Add hover effect */
+#reloadButton:hover {
+    background-color: red;
 }
