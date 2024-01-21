@@ -63,7 +63,7 @@ function generateWordCloud(user) {
 	// function to get user information from Last.fm
 	async function getUserInfo(user) {
 		const response = await fetch(
-			`http://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${user}&api_key=${lastfmApiKey}&format=json`
+			`https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${user}&api_key=${lastfmApiKey}&format=json`
 		);
 
 		const userData = await response.json();
@@ -82,7 +82,7 @@ function generateWordCloud(user) {
 
 	// make an API request to get user's top tracks
 	fetch(
-		`http://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${user}&period=${period}&api_key=${lastfmApiKey}&format=json`
+		`https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${user}&period=${period}&api_key=${lastfmApiKey}&format=json`
 	)
 		.then((response) => response.json())
 		.then(async (data) => {
