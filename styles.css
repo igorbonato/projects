@@ -1,8 +1,8 @@
-body{
+body {
   background-color: #010008;
 }
 
-html{
+html {
   height: 100vh;
   margin: 0;
 }
@@ -14,18 +14,20 @@ html{
   height: auto;
 }
 
-#username-form, #title {
+#username-form,
+#title {
   height: 100%;
   display: grid;
   place-items: center;
 }
 
-.music-title{
+.music-title {
   text-align: center;
   color: azure;
 }
 
-#original-lyrics, .divLoggout {
+#original-lyrics,
+.divLoggout {
   display: flex;
   justify-content: center;
 }
@@ -39,45 +41,51 @@ html{
 
 #original-lyrics p {
   font-family: 'Trebuchet MS', sans-serif;
-  font-weight: bold; 
-  font-size: 18px; 
+  font-weight: bold;
+  font-size: 18px;
   line-height: 1.5;
   color: antiquewhite;
 }
 
-label, input, .button {
+label,
+input,
+.button {
   margin-bottom: 10px;
 }
 
 .origin-lyric {
   font-family: 'Trebuchet MS', sans-serif;
-  font-weight: 1000; 
-  font-size: 17px; 
+  font-weight: 1000;
+  font-size: 17px;
   line-height: 1.5;
   color: white;
   margin: 10px 0;
 }
 
-.pt-lyric{
+.pt-lyric {
   margin: 10px 0;
   font-size: 16px !important;
 }
 
-.pt-lyric, label {
+.pt-lyric,
+label {
   font-family: 'Trebuchet MS', sans-serif;
-  font-size: 14px; 
+  font-size: 14px;
   font-weight: bold;
   color: #CCCCCC;
 }
 
 #title {
   font-family: 'Trebuchet MS', sans-serif;
-  font-size: 48px; 
+  font-size: 48px;
   font-weight: bold;
   color: #CCCCCC;
 }
 
-#loggout-btn, #toggle-translation-btn, #update-song-btn, #get-song {
+#loggout-btn,
+#toggle-translation-btn,
+#update-song-btn,
+#get-song {
   display: inline-block;
   padding: 10px 20px;
   font-size: 16px;
@@ -91,8 +99,30 @@ label, input, .button {
   transition: background-color 0.3s ease-in-out;
 }
 
-#loggout-btn:hover, #toggle-translation-btn:hover, #update-song-btn:hover, #get-song:hover {
+#loggout-btn:hover,
+#toggle-translation-btn:hover,
+#update-song-btn:hover,
+#get-song:hover {
   background-color: #555555;
+}
+
+#wordcloud {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #be0505;
+  border: 2px solid red;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+#wordcloud:hover {
+  background-color: red;
+
 }
 
 #btn-tweets {

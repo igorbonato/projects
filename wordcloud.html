@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>wordcloud generator</title>
+		<link rel="stylesheet" href="wordcloud.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+		/>
+	</head>
+	<body>
+		<div class="header">
+			<h1>welcome to the WordCloud generator</h1>
+			<form id="usernameForm" class="beautiful-form">
+				<div class="form-group">
+					<input
+						type="text"
+						id="lastfmUsername"
+						name="lastfmUsername"
+						required
+						placeholder="enter username"
+					/>
+				</div>
+				<div class="form-group">
+					<select id="periodSelect">
+						<option value="overall">overall</option>
+						<option value="7day">7 days</option>
+						<option value="1month">1 month</option>
+						<option value="3month">3 months</option>
+						<option value="6month">6 months</option>
+						<option value="12month">12 months</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<button type="submit" id="generateCloud">generate</button>
+				</div>
+			</form>
+		</div>
+		<div id="title"></div>
+		<div id="container" style="text-align: center"></div>
+		<div id="container-dois"></div>
+		<footer>
+			<p>designed by igorbonato</p>
+		</footer>
+		<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+		<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+		<script src="https://cdn.anychart.com/releases/v8/js/anychart-bundle.min.js"></script>
+		<script src="wordcloud.js"></script>
+	</body>
+</html>

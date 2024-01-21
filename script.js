@@ -46,8 +46,14 @@ async function fetchCurrentSong(username) {
 	}
 }
 
-const tweetsButton = document.getElementById("btn-tweets");
+// const tweetsButton = document.getElementById("btn-tweets");
 
-tweetsButton.addEventListener("click", function () {
-	window.location.href = "tweets.html";
+// tweetsButton.addEventListener("click", function () {
+// 	window.location.href = "tweets.html";
+// });
+
+const wordCloudButton = document.getElementById("wordcloud");
+
+wordCloudButton.addEventListener("click", function () {
+	window.location.href = "wordcloud.html";
 });

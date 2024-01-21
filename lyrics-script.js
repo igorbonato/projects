@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 	const urlParams = new URLSearchParams(window.location.search);
 	const artist = urlParams.get("artist");
-	const track = urlParams.get("track");
+	const track = urlParams.get("track").split("-")[0];
 	fetchLyricsAndTranslation(artist, track);
 });
 
@@ -101,7 +101,7 @@ document
 document.addEventListener("DOMContentLoaded", function () {
 	const urlParams = new URLSearchParams(window.location.search);
 	const artist = urlParams.get("artist");
-	const track = urlParams.get("track");
+	const track = urlParams.get("track").split("-")[0];
 	fetchLyricsAndTranslation(artist, track);
 });
 
@@ -120,7 +120,7 @@ async function fetchCurrentSong(username) {
 		) {
 			const currentSong = data.recenttracks.track[0];
 			const artist = currentSong.artist["#text"];
-			const trackName = currentSong.name;
+			const trackName = currentSong.name.split("-")[0];
 
 			// Redirect to the next page with the artist and track name as URL parameters
 			window.location.href = `lyrics.html?artist=${encodeURIComponent(
