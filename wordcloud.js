@@ -155,7 +155,11 @@ function generateWordCloud(user) {
 				(a, b) => filteredWordCounts[b] - filteredWordCounts[a]
 			);
 
-			const top100FilteredWords = sortedFilteredWords.slice(0, 50);
+			const top100FilteredWords = sortedFilteredWords
+				.filter((word) => word !== "")
+				.slice(0, 50);
+
+			console.log(top100FilteredWords);
 
 			const wordCloudData = top100FilteredWords.map((word) => ({
 				x: word,
