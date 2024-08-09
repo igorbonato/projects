@@ -57,3 +57,9 @@ const wordCloudButton = document.getElementById("wordcloud");
 wordCloudButton.addEventListener("click", function () {
 	window.location.href = "wordcloud.html";
 });
+
+const pcButton = document.getElementById("playcount");
+
+pcButton.addEventListener("click", function () {
+	window.location.href = "playcount.html";
+});

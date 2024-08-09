@@ -106,7 +106,8 @@ label {
   background-color: #555555;
 }
 
-#wordcloud {
+#wordcloud,
+#playcount {
   display: inline-block;
   padding: 10px 20px;
   font-size: 16px;
@@ -120,7 +121,8 @@ label {
   transition: background-color 0.3s ease-in-out;
 }
 
-#wordcloud:hover {
+#wordcloud:hover,
+#playcount:hover {
   background-color: red;
 
 }

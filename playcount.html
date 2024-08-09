@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>My Last.fm Scrobbles</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+		/>
+		<style>
+			#playcount {
+				display: inline-block;
+				padding: 0px 5px;
+				font-size: 40px;
+				font-weight: bold;
+				color: white;
+				background-color: #333333;
+				border: 2px solid transparent;
+				cursor: pointer;
+				text-decoration: none;
+				transition: background-color 0.3s ease-in-out;
+			}
+
+			body {
+				font-family: Arial, sans-serif;
+				background-color: #2e2e2e;
+				color: #f2f2f2;
+				text-align: center;
+			}
+
+			table {
+				width: 90%;
+				margin: 20px auto;
+				border-collapse: collapse;
+			}
+
+			th,
+			td {
+				padding: 10px;
+				border: 1px solid #555;
+			}
+
+			th {
+				background-color: #444;
+			}
+
+			td {
+				background-color: #333;
+			}
+
+			.loading {
+				font-size: 1.2em;
+				margin-top: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>
+			playcount bands until 2025
+			<span>
+				<button
+					class="button"
+					type="submit"
+					id="playcount"
+					style="background-color: transparent"
+				>
+					🔃
+				</button>
+			</span>
+		</h1>
+		<table id="scrobbleTable" style="display: none">
+			<thead>
+				<tr>
+					<th>bands</th>
+					<th>my scrobbles</th>
+					<th>target</th>
+					<th>remaining scrobbles</th>
+					<th>per day</th>
+					<th>per week</th>
+					<th>per month</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr id="loading">
+					<td colspan="7" style="text-align: center">
+						<i class="fas fa-spinner fa-spin" style="font-size: 24px"></i>
+						Loading...
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<script>
+			const API_KEY = "4599629be9c1be5c6a21fe58938a281f";
+			const USERNAME = "igorbonato";
+			const BASE_URL = "http://ws.audioscrobbler.com/2.0/";
+
+			const bands = [
+				{ name: "Katatonia", target: 4500 },
+				{ name: "Paradise Lost", target: 3000 },
+				{ name: "Dark Tranquillity", target: 3500 },
+				{ name: "Alice in Chains", target: 3000 },
+				{ name: "Black Sabbath", target: 2500 },
+				{ name: "Amorphis", target: 1500 },
+				{ name: "Opeth", target: 1500 },
+				{ name: "Draconian", target: 700 },
+				{ name: "Tristania", target: 1000 },
+				{ name: "Insomnium", target: 300 },
+				{ name: "Arch Enemy", target: 4000 },
+				{ name: "The Doors", target: 4000 },
+				{ name: "Amon Amarth", target: 400 },
+			];
+
+			// async function getUserTopArtists() {
+			// 	const response = await fetch(
+			// 		`${BASE_URL}?method=user.getTopArtists&user=${USERNAME}&api_key=${API_KEY}&format=json`
+			// 	);
+			// 	const data = await response.json();
+			// 	console.log(data);
+			// 	if (data.topartists && data.topartists.artist) {
+			// 		return data.topartists.artist;
+			// 	} else {
+			// 		return [];
+			// 	}
+			// }
+
+			async function getUserTopArtists() {
+				const topArtists = [];
+				let page = 1;
+				let morePages = true;
+
+				while (morePages) {
+					const response = await fetch(
+						`${BASE_URL}?method=user.getTopArtists&user=${USERNAME}&api_key=${API_KEY}&format=json&page=${page}`
+					);
+					const data = await response.json();
+
+					if (data.topartists && data.topartists.artist) {
+						topArtists.push(...data.topartists.artist);
+						morePages = data.topartists.artist.length > 0;
+						page++;
+					} else {
+						morePages = false;
+					}
+				}
+
+				return topArtists;
+			}
+
+			function getScrobblesForBand(topArtists, bandName) {
+				const artist = topArtists.find(
+					(artist) => artist.name.toLowerCase() === bandName.toLowerCase()
+				);
+				return artist ? parseInt(artist.playcount, 10) : 0;
+			}
+
+			function calculateRemainingScrobbles(currentScrobbles, target) {
+				return Math.max(0, target - currentScrobbles);
+			}
+
+			function calculateTimeUnits() {
+				const today = new Date();
+				const endOfYear = new Date(today.getFullYear(), 11, 31);
+				const timeDiff = endOfYear - today;
+
+				const remainingDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+				const remainingWeeks = Math.ceil(remainingDays / 7);
+				const remainingMonths = Math.ceil(remainingDays / 30);
+
+				return { remainingDays, remainingWeeks, remainingMonths };
+			}
+
+			function calculateScrobblesPerUnit(remainingScrobbles, remainingUnits) {
+				return Math.ceil(remainingScrobbles / remainingUnits);
+			}
+
+			async function loadScrobbleData() {
+				const tableBody = document.querySelector("#scrobbleTable tbody");
+				document.getElementById("scrobbleTable").style.display = "table";
+
+				const topArtists = await getUserTopArtists();
+				const { remainingDays, remainingWeeks, remainingMonths } =
+					calculateTimeUnits();
+
+				let totalRemainingScrobbles = 0;
+				let totalScrobblesPerDay = 0;
+				let totalScrobblesPerWeek = 0;
+				let totalScrobblesPerMonth = 0;
+
+				for (const band of bands) {
+					const scrobbles = getScrobblesForBand(topArtists, band.name);
+					const remainingScrobbles = calculateRemainingScrobbles(
+						scrobbles,
+						band.target
+					);
+
+					const scrobblesPerDay = calculateScrobblesPerUnit(
+						remainingScrobbles,
+						remainingDays
+					);
+					const scrobblesPerWeek = calculateScrobblesPerUnit(
+						remainingScrobbles,
+						remainingWeeks
+					);
+					const scrobblesPerMonth = calculateScrobblesPerUnit(
+						remainingScrobbles,
+						remainingMonths
+					);
+
+					totalRemainingScrobbles += remainingScrobbles;
+					totalScrobblesPerDay += scrobblesPerDay;
+					totalScrobblesPerWeek += scrobblesPerWeek;
+					totalScrobblesPerMonth += scrobblesPerMonth;
+
+					const row = document.createElement("tr");
+					row.innerHTML = `
+            <td>${band.name}</td>
+            <td>${scrobbles.toLocaleString()}</td>
+            <td>${band.target.toLocaleString()}</td>
+            <td>${remainingScrobbles.toLocaleString()}</td>
+            <td>${scrobblesPerDay}</td>
+            <td>${scrobblesPerWeek}</td>
+            <td>${scrobblesPerMonth}</td>
+        `;
+					tableBody.appendChild(row);
+					document.getElementById("loading").style.display = "none";
+				}
+
+				const sumRow = document.createElement("tr");
+				sumRow.innerHTML = `
+        <td><strong>Total</strong></td>
+        <td></td>
+        <td></td>
+        <td><strong>${totalRemainingScrobbles.toLocaleString()}</strong></td>
+        <td><strong>${totalScrobblesPerDay}</strong></td>
+        <td><strong>${totalScrobblesPerWeek}</strong></td>
+        <td><strong>${totalScrobblesPerMonth}</strong></td>
+    `;
+				tableBody.appendChild(sumRow);
+			}
+
+			const pcButton = document.getElementById("playcount");
+
+			pcButton.addEventListener("click", function () {
+				window.location.href = "playcount.html";
+			});
+
+			document.addEventListener("DOMContentLoaded", loadScrobbleData);
+		</script>
+	</body>
+</html>
