@@ -67,6 +67,10 @@
 				>
 					🔃
 				</button>
+				<i
+					id="lastUpdated"
+					style="font-size: 0.6em; margin-left: 10px; font-weight: 300"
+				></i>
 			</span>
 		</h1>
 		<table id="scrobbleTable" style="display: none">
@@ -175,11 +179,34 @@
 				return Math.ceil(remainingScrobbles / remainingUnits);
 			}
 
+			function saveScrobbleDataToLocalStorage(data) {
+				localStorage.setItem("scrobbleData", JSON.stringify(data));
+			}
+
+			function loadScrobbleDataFromLocalStorage() {
+				const data = localStorage.getItem("scrobbleData");
+				return data ? JSON.parse(data) : null;
+			}
+
 			async function loadScrobbleData() {
 				const tableBody = document.querySelector("#scrobbleTable tbody");
 				document.getElementById("scrobbleTable").style.display = "table";
 
-				const topArtists = await getUserTopArtists();
+				var topArtists = loadScrobbleDataFromLocalStorage();
+				var lastUpdated = localStorage.getItem("lastUpdated");
+
+				if (!topArtists) {
+					topArtists = await getUserTopArtists();
+					saveScrobbleDataToLocalStorage(topArtists);
+
+					lastUpdated = new Date().toLocaleString();
+					localStorage.setItem("lastUpdated", lastUpdated);
+				}
+
+				document.getElementById(
+					"lastUpdated"
+				).textContent = `updated ${lastUpdated}`;
+
 				const { remainingDays, remainingWeeks, remainingMonths } =
 					calculateTimeUnits();
 
@@ -243,6 +270,7 @@
 			const pcButton = document.getElementById("playcount");
 
 			pcButton.addEventListener("click", function () {
+				localStorage.clear();
 				window.location.href = "playcount.html";
 			});
 
