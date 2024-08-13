@@ -94,7 +94,6 @@
 				</tr>
 			</tbody>
 		</table>
-
 		<script>
 			const API_KEY = "4599629be9c1be5c6a21fe58938a281f";
 			const USERNAME = "igorbonato";
@@ -116,18 +115,9 @@
 				{ name: "Amon Amarth", target: 400 },
 			];
 
-			// async function getUserTopArtists() {
-			// 	const response = await fetch(
-			// 		`${BASE_URL}?method=user.getTopArtists&user=${USERNAME}&api_key=${API_KEY}&format=json`
-			// 	);
-			// 	const data = await response.json();
-			// 	console.log(data);
-			// 	if (data.topartists && data.topartists.artist) {
-			// 		return data.topartists.artist;
-			// 	} else {
-			// 		return [];
-			// 	}
-			// }
+			function getUnixTimestamp(date) {
+				return Math.floor(date.getTime() / 1000);
+			}
 
 			async function getUserTopArtists() {
 				const topArtists = [];
@@ -179,33 +169,61 @@
 				return Math.ceil(remainingScrobbles / remainingUnits);
 			}
 
-			function saveScrobbleDataToLocalStorage(data) {
-				localStorage.setItem("scrobbleData", JSON.stringify(data));
+			function saveScrobbleDataToLocalStorage(data, key) {
+				localStorage.setItem(key, JSON.stringify(data));
 			}
 
-			function loadScrobbleDataFromLocalStorage() {
-				const data = localStorage.getItem("scrobbleData");
+			function loadScrobbleDataFromLocalStorage(key) {
+				const data = localStorage.getItem(key);
 				return data ? JSON.parse(data) : null;
+			}
+
+			async function scrapeMonthlyScrobbles(bandName) {
+				const today = new Date();
+				const firstDayOfMonth = new Date(
+					today.getFullYear(),
+					today.getMonth(),
+					1
+				);
+				const fromTimestamp = getUnixTimestamp(firstDayOfMonth);
+				const toTimestamp = getUnixTimestamp(today);
+
+				const url = `${BASE_URL}?method=user.getrecenttracks&user=${USERNAME}&api_key=${API_KEY}&format=json&from=${fromTimestamp}&to=${toTimestamp}&limit=1000`;
+
+				const response = await fetch(url);
+				const data = await response.json();
+
+				if (data.recenttracks && data.recenttracks.track) {
+					const recentTracks = data.recenttracks.track;
+					const bandTracks = recentTracks.filter(
+						(track) =>
+							track.artist["#text"].toLowerCase() === bandName.toLowerCase()
+					);
+					return bandTracks.length;
+				} else {
+					return 0;
+				}
 			}
 
 			async function loadScrobbleData() {
 				const tableBody = document.querySelector("#scrobbleTable tbody");
 				document.getElementById("scrobbleTable").style.display = "table";
 
-				var topArtists = loadScrobbleDataFromLocalStorage();
-				var lastUpdated = localStorage.getItem("lastUpdated");
+				let topArtists = loadScrobbleDataFromLocalStorage("topArtists");
+				let scrapedScrobblesData =
+					loadScrobbleDataFromLocalStorage("scrapedScrobblesData") || {};
 
 				if (!topArtists) {
 					topArtists = await getUserTopArtists();
-					saveScrobbleDataToLocalStorage(topArtists);
+					saveScrobbleDataToLocalStorage(topArtists, "topArtists");
 
-					lastUpdated = new Date().toLocaleString();
+					const lastUpdated = new Date().toLocaleString();
 					localStorage.setItem("lastUpdated", lastUpdated);
 				}
 
 				document.getElementById(
 					"lastUpdated"
-				).textContent = `updated ${lastUpdated}`;
+				).textContent = `Updated ${localStorage.getItem("lastUpdated")}`;
 
 				const { remainingDays, remainingWeeks, remainingMonths } =
 					calculateTimeUnits();
@@ -217,6 +235,19 @@
 
 				for (const band of bands) {
 					const scrobbles = getScrobblesForBand(topArtists, band.name);
+
+					let scrapedScrobbles;
+					if (scrapedScrobblesData[band.name]) {
+						scrapedScrobbles = scrapedScrobblesData[band.name];
+					} else {
+						scrapedScrobbles = await scrapeMonthlyScrobbles(band.name);
+						scrapedScrobblesData[band.name] = scrapedScrobbles;
+						saveScrobbleDataToLocalStorage(
+							scrapedScrobblesData,
+							"scrapedScrobblesData"
+						);
+					}
+
 					const remainingScrobbles = calculateRemainingScrobbles(
 						scrobbles,
 						band.target
@@ -240,31 +271,34 @@
 					totalScrobblesPerWeek += scrobblesPerWeek;
 					totalScrobblesPerMonth += scrobblesPerMonth;
 
+					const color =
+						scrapedScrobbles >= scrobblesPerMonth ? "#66FF00" : "red";
+
 					const row = document.createElement("tr");
 					row.innerHTML = `
-            <td>${band.name}</td>
-            <td>${scrobbles.toLocaleString()}</td>
-            <td>${band.target.toLocaleString()}</td>
-            <td>${remainingScrobbles.toLocaleString()}</td>
-            <td>${scrobblesPerDay}</td>
-            <td>${scrobblesPerWeek}</td>
-            <td>${scrobblesPerMonth}</td>
-        `;
+						<td>${band.name}</td>
+						<td>${scrobbles.toLocaleString()}</td>
+						<td>${band.target.toLocaleString()}</td>
+						<td>${remainingScrobbles.toLocaleString()}</td>
+						<td>${scrobblesPerDay}</td>
+						<td>${scrobblesPerWeek}</td>
+						<td>${scrobblesPerMonth} - <span style="color: ${color};">${scrapedScrobbles}</span></td>
+					`;
 					tableBody.appendChild(row);
-					document.getElementById("loading").style.display = "none";
 				}
 
 				const sumRow = document.createElement("tr");
 				sumRow.innerHTML = `
-        <td><strong>Total</strong></td>
-        <td></td>
-        <td></td>
-        <td><strong>${totalRemainingScrobbles.toLocaleString()}</strong></td>
-        <td><strong>${totalScrobblesPerDay}</strong></td>
-        <td><strong>${totalScrobblesPerWeek}</strong></td>
-        <td><strong>${totalScrobblesPerMonth}</strong></td>
-    `;
+					<td><strong>Total</strong></td>
+					<td></td>
+					<td></td>
+					<td><strong>${totalRemainingScrobbles.toLocaleString()}</strong></td>
+					<td><strong>${totalScrobblesPerDay}</strong></td>
+					<td><strong>${totalScrobblesPerWeek}</strong></td>
+					<td><strong>${totalScrobblesPerMonth}</strong></td>
+				`;
 				tableBody.appendChild(sumRow);
+				document.getElementById("loading").style.display = "none";
 			}
 
 			const pcButton = document.getElementById("playcount");
