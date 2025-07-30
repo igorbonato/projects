@@ -76,13 +76,13 @@
 		<table id="scrobbleTable" style="display: none">
 			<thead>
 				<tr>
-					<th>bands</th>
-					<th>my scrobbles</th>
-					<th>target</th>
-					<th>remaining scrobbles</th>
-					<th>per day</th>
-					<th>per week</th>
-					<th>per month</th>
+					<th data-index="0">bands</th>
+					<th data-index="1">my scrobbles</th>
+					<th data-index="2">target</th>
+					<th data-index="3">remaining scrobbles</th>
+					<th data-index="4">per day</th>
+					<th data-index="5">per week</th>
+					<th data-index="6">per month</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -342,6 +342,43 @@
 			});
 
 			document.addEventListener("DOMContentLoaded", loadScrobbleData);
+
+			let currentSortColumn = null;
+			let currentSortDirection = 1;
+			
+			document.querySelectorAll("th[data-index]").forEach((th) => {
+				th.style.cursor = "pointer";
+				th.addEventListener("click", () => {
+					const colIndex = parseInt(th.dataset.index);
+					const tbody = document.querySelector("#scrobbleTable tbody");
+					const rows = Array.from(tbody.querySelectorAll("tr")).filter(
+						(row) => !row.querySelector("td strong") // ignora linha de totais
+					);
+			
+					// Alternar direção
+					if (currentSortColumn === colIndex) {
+						currentSortDirection *= -1;
+					} else {
+						currentSortDirection = 1;
+						currentSortColumn = colIndex;
+					}
+			
+					rows.sort((a, b) => {
+						const aText = a.children[colIndex].textContent.trim().replace(/[^0-9a-z.-]/gi, '');
+						const bText = b.children[colIndex].textContent.trim().replace(/[^0-9a-z.-]/gi, '');
+			
+						const aVal = isNaN(aText) ? aText.toLowerCase() : parseFloat(aText);
+						const bVal = isNaN(bText) ? bText.toLowerCase() : parseFloat(bText);
+			
+						if (aVal < bVal) return -1 * currentSortDirection;
+						if (aVal > bVal) return 1 * currentSortDirection;
+						return 0;
+					});
+			
+					rows.forEach((row) => tbody.appendChild(row));
+				});
+			});
+
 		</script>
 	</body>
 </html>
