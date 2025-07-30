@@ -342,43 +342,6 @@
 			});
 
 			document.addEventListener("DOMContentLoaded", loadScrobbleData);
-
-			let currentSortColumn = null;
-			let currentSortDirection = 1;
-			
-			document.querySelectorAll("th[data-index]").forEach((th) => {
-				th.style.cursor = "pointer";
-				th.addEventListener("click", () => {
-					const colIndex = parseInt(th.dataset.index);
-					const tbody = document.querySelector("#scrobbleTable tbody");
-					const rows = Array.from(tbody.querySelectorAll("tr")).filter(
-						(row) => !row.querySelector("td strong") // ignora linha de totais
-					);
-			
-					// Alternar direção
-					if (currentSortColumn === colIndex) {
-						currentSortDirection *= -1;
-					} else {
-						currentSortDirection = 1;
-						currentSortColumn = colIndex;
-					}
-			
-					rows.sort((a, b) => {
-						const aText = a.children[colIndex].textContent.trim().replace(/[^0-9a-z.-]/gi, '');
-						const bText = b.children[colIndex].textContent.trim().replace(/[^0-9a-z.-]/gi, '');
-			
-						const aVal = isNaN(aText) ? aText.toLowerCase() : parseFloat(aText);
-						const bVal = isNaN(bText) ? bText.toLowerCase() : parseFloat(bText);
-			
-						if (aVal < bVal) return -1 * currentSortDirection;
-						if (aVal > bVal) return 1 * currentSortDirection;
-						return 0;
-					});
-			
-					rows.forEach((row) => tbody.appendChild(row));
-				});
-			});
-
 		</script>
 	</body>
 </html>
